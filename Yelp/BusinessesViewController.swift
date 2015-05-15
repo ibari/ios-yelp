@@ -9,9 +9,10 @@
 import UIKit
 
 class BusinessesViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
-  var businesses: [Business]!
-  
   @IBOutlet weak var tableView: UITableView!
+  
+  var businesses: [Business]!
+  var searchBar: UISearchBar!
   
   override func viewDidLoad() {
     super.viewDidLoad()
@@ -21,28 +22,21 @@ class BusinessesViewController: UIViewController, UITableViewDataSource, UITable
     tableView.rowHeight = UITableViewAutomaticDimension
     tableView.estimatedRowHeight = 100
     
-    Business.searchWithTerm("Thai", completion: { (businesses: [Business]!, error: NSError!) -> Void in
-      self.businesses = businesses
-      
-      self.businesses = businesses
-      self.tableView.reloadData()
-      
-      for business in businesses {
-        println(business.name!)
-        println(business.address!)
-        println(business.categories!)
-      }
-    })
+    // initialize UISearchBar
+    searchBar = UISearchBar()
+    searchBar.delegate = self
     
-    /*Business.searchWithTerm("Restaurants", sort: .Distance, categories: ["asianfusion", "burgers"], deals: true) { (businesses: [Business]!, error: NSError!) -> Void in
+    // add search bar to navigation bar
+    searchBar.sizeToFit()
+    navigationItem.titleView = searchBar
+    
+    let searchField = searchBar.valueForKey("searchField") as? UITextField
+    searchField!.textColor = UIColor.grayColor()
+    
+    Business.searchWithTerm("Restaurants", completion: { (businesses: [Business]!, error: NSError!) -> Void in
       self.businesses = businesses
       self.tableView.reloadData()
-      
-      for business in businesses {
-        println(business.name!)
-        println(business.address!)
-      }
-    }*/
+    })
   }
   
   override func didReceiveMemoryWarning() {
@@ -50,6 +44,18 @@ class BusinessesViewController: UIViewController, UITableViewDataSource, UITable
     // Dispose of any resources that can be recreated.
   }
   
+  /*
+  // MARK: - Navigation
+  
+  // In a storyboard-based application, you will often want to do a little preparation before navigation
+  override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+  // Get the new view controller using segue.destinationViewController.
+  // Pass the selected object to the new view controller.
+  }
+  */
+}
+
+extension BusinessesViewController: UITableViewDataSource, UITableViewDelegate {
   func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
     let cell = tableView.dequeueReusableCellWithIdentifier("BusinessCell", forIndexPath: indexPath) as! BusinessCell
     
@@ -65,14 +71,41 @@ class BusinessesViewController: UIViewController, UITableViewDataSource, UITable
       return 0
     }
   }
-  
-  /*
-  // MARK: - Navigation
-  
-  // In a storyboard-based application, you will often want to do a little preparation before navigation
-  override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-  // Get the new view controller using segue.destinationViewController.
-  // Pass the selected object to the new view controller.
+}
+
+extension BusinessesViewController: UISearchBarDelegate {
+  func searchBarShouldBeginEditing(searchBar: UISearchBar) -> Bool {
+    searchBar.setShowsCancelButton(true, animated: true)
+    return true;
   }
-  */
+  
+  func searchBarShouldEndEditing(searchBar: UISearchBar) -> Bool {
+    searchBar.setShowsCancelButton(false, animated: true)
+    return true;
+  }
+  
+  func searchBarCancelButtonClicked(searchBar: UISearchBar) {
+    searchBar.text = ""
+    searchBar.resignFirstResponder()
+  }
+  
+  func searchBarSearchButtonClicked(searchBar: UISearchBar) {
+    //searchSettings.searchString = searchBar.text
+    searchBar.resignFirstResponder()
+    
+    Business.searchWithTerm("Restaurants \(searchBar.text)", completion: { (businesses: [Business]!, error: NSError!) -> Void in
+      self.businesses = businesses
+      self.tableView.reloadData()
+    })
+    
+    /*Business.searchWithTerm("Restaurants", sort: .Distance, categories: ["asianfusion", "burgers"], deals: true) { (businesses: [Business]!, error: NSError!) -> Void in
+    self.businesses = businesses
+    self.tableView.reloadData()
+    
+    for business in businesses {
+    println(business.name!)
+    println(business.address!)
+    }
+    }*/
+  }
 }
