@@ -8,7 +8,7 @@
 
 import UIKit
 
-class BusinessesViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
+class BusinessesViewController: UIViewController {
   @IBOutlet weak var tableView: UITableView!
   
   var businesses: [Business]!
@@ -44,15 +44,13 @@ class BusinessesViewController: UIViewController, UITableViewDataSource, UITable
     // Dispose of any resources that can be recreated.
   }
   
-  /*
   // MARK: - Navigation
-  
-  // In a storyboard-based application, you will often want to do a little preparation before navigation
   override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-  // Get the new view controller using segue.destinationViewController.
-  // Pass the selected object to the new view controller.
+    let navigationController = segue.destinationViewController as! UINavigationController
+    let filtersViewController = navigationController.topViewController as! FiltersViewController
+    
+    filtersViewController.delegate = self
   }
-  */
 }
 
 extension BusinessesViewController: UITableViewDataSource, UITableViewDelegate {
@@ -71,11 +69,15 @@ extension BusinessesViewController: UITableViewDataSource, UITableViewDelegate {
       return 0
     }
   }
+  
+  func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+    tableView.deselectRowAtIndexPath(indexPath, animated: true)
+  }
 }
 
 extension BusinessesViewController: UISearchBarDelegate {
   func searchBarShouldBeginEditing(searchBar: UISearchBar) -> Bool {
-    searchBar.setShowsCancelButton(true, animated: true)
+    searchBar.setShowsCancelButton(false, animated: true)
     return true;
   }
   
@@ -107,5 +109,16 @@ extension BusinessesViewController: UISearchBarDelegate {
     println(business.address!)
     }
     }*/
+  }
+}
+
+extension BusinessesViewController: FiltersViewControllerDelegate {
+  func filtersViewController(filtersViewController: FiltersViewController, didUpdateFilters filters: [String : AnyObject]) {
+    var categories = filters["categories"] as? [String]
+    
+    Business.searchWithTerm("Restaurants", sort: nil, categories: categories, deals: nil, completion: { (businesses: [Business]!, error: NSError!) -> Void in
+      self.businesses = businesses
+      self.tableView.reloadData()
+    })
   }
 }
