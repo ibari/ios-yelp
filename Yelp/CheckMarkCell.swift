@@ -8,10 +8,14 @@
 
 import UIKit
 
+@objc protocol CheckMarkCellDelegate {
+  optional func checkMarkCell(checkMarkCell: CheckMarkCell, toggleIdenfifier: AnyObject, didChangeValue value:Bool)
+}
+
 class CheckMarkCell: UITableViewCell {
   @IBOutlet weak var descriptionLabel: UILabel!
   
-  var switchIdentifier: AnyObject = ""
+  var checkIdentifier: AnyObject = ""
   var isChecked: Bool = false {
     didSet {
       if isChecked {
@@ -22,18 +26,17 @@ class CheckMarkCell: UITableViewCell {
     }
   }
   
-  //weak var delegate: ToggleCellDelegate?
+  weak var delegate: CheckMarkCellDelegate?
 
   override func awakeFromNib() {
-      super.awakeFromNib()
-      // Initialization code
+    super.awakeFromNib()
   }
 
   override func setSelected(selected: Bool, animated: Bool) {
     if selected && !self.selected {
       super.setSelected(true, animated: true)
       isChecked = !isChecked
-      //delegate?.toggleCellDidToggle(self, toggleIdenfifier: switchIdentifier, newValue: isChecked)
+      delegate?.checkMarkCell?(self, toggleIdenfifier: checkIdentifier, didChangeValue: isChecked)
       super.setSelected(false, animated: true)
     }
   }

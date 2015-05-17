@@ -17,6 +17,8 @@ class FiltersViewController: UIViewController {
   
   var filters = SearchFilters()
   var dealStates = [Int:Bool]()
+  var selectedRadius: Int?
+  var selectedSort: Int?
   var categoryStates = [Int:Bool]()
   weak var delegate: FiltersViewControllerDelegate?
   
@@ -43,7 +45,7 @@ class FiltersViewController: UIViewController {
     var selectedFilters = [String: AnyObject]()
     var selectedCategories = [String]()
 
-    // prepare category selections
+    // set category selections
     for (row, isSelected) in categoryStates {
       if isSelected {
         selectedCategories.append(filters.categories[row]["code"]!)
@@ -54,9 +56,19 @@ class FiltersViewController: UIViewController {
       selectedFilters["categories"] = selectedCategories
     }
     
-    // prepare deal selection
+    // set deal selection
     selectedFilters["deal"] = dealStates[0] ?? nil
     
+    // set radius selection
+    selectedFilters["radius"] = selectedRadius
+    
+    if let radiusIndex = selectedRadius {
+      selectedFilters["radius"] = filters.radiuses[radiusIndex as Int]["value"]!
+    }
+
+    // set sort selection
+    selectedFilters["sort"] = selectedSort
+  
     delegate?.filtersViewController?(self, didUpdateFilters: selectedFilters)
   }
 }
@@ -76,6 +88,10 @@ extension FiltersViewController: UITableViewDataSource, UITableViewDelegate {
     if section == 0 {
       rows = filters.deals.count
     } else if section == 1 {
+      rows = filters.radiuses.count
+    } else if section == 2 {
+      rows = filters.sorts.count
+    } else if section == 3 {
       rows = filters.categories.count
     } else {
       rows = 0
@@ -97,6 +113,22 @@ extension FiltersViewController: UITableViewDataSource, UITableViewDelegate {
       
       return dealCell
     } else if indexPath.section == 1 {
+      let radiusCell = tableView.dequeueReusableCellWithIdentifier("CheckMarkCell", forIndexPath: indexPath) as! CheckMarkCell
+      
+      radiusCell.descriptionLabel.text = filters.radiuses[indexPath.row]["name"] as? String
+      radiusCell.delegate = self
+      radiusCell.checkIdentifier = cellIdentifier
+
+      return radiusCell
+    } else if indexPath.section == 2 {
+      let sortCell = tableView.dequeueReusableCellWithIdentifier("CheckMarkCell", forIndexPath: indexPath) as! CheckMarkCell
+      
+      sortCell.descriptionLabel.text = filters.sorts[indexPath.row]["name"] as? String
+      sortCell.delegate = self
+      sortCell.checkIdentifier = cellIdentifier
+      
+      return sortCell
+    } else if indexPath.section == 3 {
       let categoryCell = tableView.dequeueReusableCellWithIdentifier("SwitchCell", forIndexPath: indexPath) as! SwitchCell
       
       categoryCell.switchLabel.text = filters.categories[indexPath.row]["name"]
@@ -118,12 +150,28 @@ extension FiltersViewController: UITableViewDataSource, UITableViewDelegate {
 extension FiltersViewController: SwitchCellDelegate {
   func switchCell(switchCell: SwitchCell, toggleIdenfifier: AnyObject, didChangeValue value: Bool) {
     let indexPath = tableView.indexPathForCell(switchCell)
-    
+  
     if let identifier = toggleIdenfifier as? String {
       if identifier == "deal" {
         dealStates[indexPath!.row] = value
       } else if identifier == "category" {
         categoryStates[indexPath!.row] = value
+      }
+    }
+  }
+}
+
+extension FiltersViewController: CheckMarkCellDelegate {
+  func checkMarkCell(checkMarkCell: CheckMarkCell, toggleIdenfifier: AnyObject, didChangeValue value: Bool) {
+    let indexPath = tableView.indexPathForCell(checkMarkCell)
+    
+    if let identifier = toggleIdenfifier as? String {
+      if value == true {
+        if identifier == "radius" {
+          selectedRadius = indexPath!.row
+        } else if identifier == "sort" {
+          selectedSort = indexPath!.row
+        }
       }
     }
   }

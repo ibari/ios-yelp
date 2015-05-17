@@ -10,8 +10,10 @@ import Foundation
 
 
 struct SearchFilters {
-  let sections = [["name" : "deal", "title" : ""], ["name" : "category", "title" : "Category"]]
+  let sections = [["name" : "deal", "title" : ""], ["name" : "radius", "title" : "Distance"], ["name" : "sort", "title" : "Sort By"], ["name" : "category", "title" : "Category"]]
   let deals = [["name" : "Offering a Deal"]]
+  let radiuses = [["name" : "0.3 miles", "value" : 0.3], ["name" : "1 mile", "value" : 1], ["name" : "5 mile", "value" : 5], ["name" : "20 mile", "value" : 20]]
+  let sorts = [["name" : "Best Match", "value" : 0], ["name" : "Distance", "value" : 1], ["name" : "Highest Rated", "value" : 2]]
   var categories = [[String:String]]()
   
   init() {

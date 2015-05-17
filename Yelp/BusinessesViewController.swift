@@ -98,16 +98,6 @@ extension BusinessesViewController: UISearchBarDelegate {
       self.businesses = businesses
       self.tableView.reloadData()
     })
-    
-    /*Business.searchWithTerm("Restaurants", sort: .Distance, categories: ["asianfusion", "burgers"], deals: true) { (businesses: [Business]!, error: NSError!) -> Void in
-    self.businesses = businesses
-    self.tableView.reloadData()
-    
-    for business in businesses {
-    println(business.name!)
-    println(business.address!)
-    }
-    }*/
   }
 }
 
@@ -115,8 +105,18 @@ extension BusinessesViewController: FiltersViewControllerDelegate {
   func filtersViewController(filtersViewController: FiltersViewController, didUpdateFilters selectedFilters: [String : AnyObject]) {
     var categories = selectedFilters["categories"] as? [String]
     var deal = selectedFilters["deal"] as? Bool
+    var radius: Double?
+    var sortMode = YelpSortMode(rawValue: 0)!
     
-    Business.searchWithTerm("Restaurants", sort: nil, categories: categories, deals: deal, completion: { (businesses: [Business]!, error: NSError!) -> Void in
+    if let sort = selectedFilters["sort"] as? Int {
+      sortMode = YelpSortMode(rawValue: sort)!
+    }
+    
+    if let miles = selectedFilters["radius"] as? Double {
+      radius = miles * 1609.34  // convert to meters
+    }
+    
+    Business.searchWithTerm("Restaurants", sort: sortMode, categories: categories, radius: radius, deals: deal, completion: { (businesses: [Business]!, error: NSError!) -> Void in
       self.businesses = businesses
       self.tableView.reloadData()
     })

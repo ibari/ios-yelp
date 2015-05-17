@@ -160,13 +160,18 @@
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="b3I-J5-9cz" id="Guv-pA-3gg">
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="mDy-Zg-rfI">
-                                                    <rect key="frame" x="8" y="25" width="42" height="21"/>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Best Match" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="mDy-Zg-rfI">
+                                                    <rect key="frame" x="8" y="8" width="81" height="55"/>
                                                     <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
                                                     <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                             </subviews>
+                                            <constraints>
+                                                <constraint firstItem="mDy-Zg-rfI" firstAttribute="top" secondItem="Guv-pA-3gg" secondAttribute="top" constant="8" id="EWI-Yi-XBP"/>
+                                                <constraint firstItem="mDy-Zg-rfI" firstAttribute="leading" secondItem="Guv-pA-3gg" secondAttribute="leading" constant="8" id="Lyb-RP-pVM"/>
+                                                <constraint firstAttribute="bottom" secondItem="mDy-Zg-rfI" secondAttribute="bottom" constant="8" id="qgl-aA-Apy"/>
+                                            </constraints>
                                         </tableViewCellContentView>
                                         <connections>
                                             <outlet property="descriptionLabel" destination="mDy-Zg-rfI" id="Vje-5e-bOQ"/>
@@ -182,8 +187,8 @@
                                                     <rect key="frame" x="263" y="18" width="51" height="31"/>
                                                     <color key="onTintColor" red="0.74117647060000003" green="0.054901960780000002" blue="0.0078431372550000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                 </switch>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="African" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Xfv-Jd-7CE">
-                                                    <rect key="frame" x="8" y="25" width="50" height="18"/>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="African" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Xfv-Jd-7CE">
+                                                    <rect key="frame" x="8" y="27" width="50" height="18"/>
                                                     <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
                                                     <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                                     <nil key="highlightedColor"/>
