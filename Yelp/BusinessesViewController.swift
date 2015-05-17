@@ -92,7 +92,6 @@ extension BusinessesViewController: UISearchBarDelegate {
   }
   
   func searchBarSearchButtonClicked(searchBar: UISearchBar) {
-    //searchSettings.searchString = searchBar.text
     searchBar.resignFirstResponder()
     
     Business.searchWithTerm("Restaurants \(searchBar.text)", completion: { (businesses: [Business]!, error: NSError!) -> Void in
@@ -113,10 +112,11 @@ extension BusinessesViewController: UISearchBarDelegate {
 }
 
 extension BusinessesViewController: FiltersViewControllerDelegate {
-  func filtersViewController(filtersViewController: FiltersViewController, didUpdateFilters filters: [String : AnyObject]) {
-    var categories = filters["categories"] as? [String]
+  func filtersViewController(filtersViewController: FiltersViewController, didUpdateFilters selectedFilters: [String : AnyObject]) {
+    var categories = selectedFilters["categories"] as? [String]
+    var deal = selectedFilters["deal"] as? Bool
     
-    Business.searchWithTerm("Restaurants", sort: nil, categories: categories, deals: nil, completion: { (businesses: [Business]!, error: NSError!) -> Void in
+    Business.searchWithTerm("Restaurants", sort: nil, categories: categories, deals: deal, completion: { (businesses: [Business]!, error: NSError!) -> Void in
       self.businesses = businesses
       self.tableView.reloadData()
     })
