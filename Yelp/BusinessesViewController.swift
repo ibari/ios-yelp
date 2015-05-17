@@ -126,7 +126,7 @@ extension BusinessesViewController: FiltersViewControllerDelegate {
       radius = miles * 1609.34  // convert to meters
     }
     
-    Business.searchWithTerm("Restaurants", sort: sortMode, categories: categories, radius: radius, deals: deal, completion: { (businesses: [Business]!, error: NSError!) -> Void in
+    Business.searchWithTerm("Restaurants \(searchBar.text)", sort: sortMode, categories: categories, radius: radius, deals: deal, completion: { (businesses: [Business]!, error: NSError!) -> Void in
       self.businesses = businesses
       self.tableView.reloadData()
       
