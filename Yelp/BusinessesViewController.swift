@@ -33,9 +33,13 @@ class BusinessesViewController: UIViewController {
     let searchField = searchBar.valueForKey("searchField") as? UITextField
     searchField!.textColor = UIColor.grayColor()
     
+    MBProgressHUD.showHUDAddedTo(self.view, animated: true)
+    
     Business.searchWithTerm("Restaurants", completion: { (businesses: [Business]!, error: NSError!) -> Void in
       self.businesses = businesses
       self.tableView.reloadData()
+      
+      MBProgressHUD.hideHUDForView(self.view, animated: true)
     })
   }
   
@@ -94,9 +98,13 @@ extension BusinessesViewController: UISearchBarDelegate {
   func searchBarSearchButtonClicked(searchBar: UISearchBar) {
     searchBar.resignFirstResponder()
     
+    MBProgressHUD.showHUDAddedTo(self.view, animated: true)
+    
     Business.searchWithTerm("Restaurants \(searchBar.text)", completion: { (businesses: [Business]!, error: NSError!) -> Void in
       self.businesses = businesses
       self.tableView.reloadData()
+      
+      MBProgressHUD.hideHUDForView(self.view, animated: true)
     })
   }
 }
@@ -107,6 +115,8 @@ extension BusinessesViewController: FiltersViewControllerDelegate {
     var deal = selectedFilters["deal"] as? Bool
     var radius: Double?
     var sortMode = YelpSortMode(rawValue: 0)!
+    
+    MBProgressHUD.showHUDAddedTo(self.view, animated: true)
     
     if let sort = selectedFilters["sort"] as? Int {
       sortMode = YelpSortMode(rawValue: sort)!
@@ -119,6 +129,8 @@ extension BusinessesViewController: FiltersViewControllerDelegate {
     Business.searchWithTerm("Restaurants", sort: sortMode, categories: categories, radius: radius, deals: deal, completion: { (businesses: [Business]!, error: NSError!) -> Void in
       self.businesses = businesses
       self.tableView.reloadData()
+      
+      MBProgressHUD.hideHUDForView(self.view, animated: true)
     })
   }
 }

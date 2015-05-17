@@ -17,9 +17,9 @@ class FiltersViewController: UIViewController {
   
   var filters = SearchFilters()
   var dealStates = [Int:Bool]()
+  var categoryStates = [Int:Bool]()
   var selectedRadius: Int?
   var selectedSort: Int?
-  var categoryStates = [Int:Bool]()
   weak var delegate: FiltersViewControllerDelegate?
   
   override func viewDidLoad() {
