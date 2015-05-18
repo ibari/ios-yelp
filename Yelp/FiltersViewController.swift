@@ -78,8 +78,19 @@ extension FiltersViewController: UITableViewDataSource, UITableViewDelegate {
     return filters.sections.count
   }
   
-  func tableView(tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-    return filters.sections[section]["title"]!
+  func tableView(tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+    var title: UILabel = UILabel()
+    
+    title.text = filters.sections[section]["title"]!
+    title.textAlignment = NSTextAlignment.Center
+    title.backgroundColor = UIColor.lightGrayColor().colorWithAlphaComponent(0.07)
+    title.font = UIFont.boldSystemFontOfSize(17)
+    
+    return title
+  }
+  
+  func tableView(tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+    return (section > 0) ? 40.0 : 0
   }
   
   func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -105,8 +116,10 @@ extension FiltersViewController: UITableViewDataSource, UITableViewDelegate {
     
     if indexPath.section == 0 {
       let dealCell = tableView.dequeueReusableCellWithIdentifier("SwitchCell", forIndexPath: indexPath) as! SwitchCell
-
-      dealCell.switchLabel.text = filters.deals[0]["name"]
+      
+      dealCell.switchLabel.font = UIFont.boldSystemFontOfSize(15)
+      dealCell.switchLabel.textColor = UIColor.blackColor()
+      dealCell.switchLabel.text = filters.deals[0]["name"]! 
       dealCell.delegate = self
       dealCell.onSwitch.on = dealStates[indexPath.row] ?? false
       dealCell.switchIdentifier = cellIdentifier
